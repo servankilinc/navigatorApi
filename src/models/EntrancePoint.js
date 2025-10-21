@@ -5,7 +5,8 @@ const pointSchema = new mongoose.Schema({
   type: {
       type: String,
       enum: ['Point'],   // GeoJSON Point tipi
-      required: true
+      required: true,
+      default: 'Point'
   },
   coordinates: {
       type: [Number],   // [longitude, latitude]
@@ -18,7 +19,8 @@ export const entrancePointSchema = new mongoose.Schema({
   type: {
       type: String,
       enum: ['Feature'],   // GeoJSON Feature tipi
-      required: true
+      required: true,
+      default: 'Feature'
   },
   geometry: {
       type: pointSchema,   // GeoJSON Point embedded
