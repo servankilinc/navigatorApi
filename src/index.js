@@ -10,6 +10,7 @@ import graphRoutes from './routes/graphRoutes.js';
 import pathRoutes from './routes/pathRoutes.js';
 import polygonRoutes from './routes/polygonRoutes.js';
 import solidRoutes from './routes/solidRoutes.js';
+import sketchRoutes from './routes/sketchRoutes.js';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api/graph', graphRoutes);
 app.use('/api/path', pathRoutes);
 app.use('/api/polygon', polygonRoutes);
 app.use('/api/solid', solidRoutes);
+app.use('/api/sketch', sketchRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)

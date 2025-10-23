@@ -74,7 +74,7 @@ router.post('/CreateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 3,
+          height: 4,
           color: "#BCCCDC"
         }
       });
@@ -90,7 +90,7 @@ router.post('/CreateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 16,
+          height: 5,
           color: "#9AA6B2"
         }
       });
@@ -117,6 +117,7 @@ router.post('/CreateAll', async (req, res) => {
 // POST multiple
 router.post('/UpdateAll', async (req, res) => {
   try {
+    debugger;
     const clearedList = await Polygon.deleteMany({});
     if(!clearedList) {
       throw new Error('Paths not cleared');
@@ -135,9 +136,11 @@ router.post('/UpdateAll', async (req, res) => {
 
     var solidPolyList = [];
     newPolygons.map(nPoly => {
-
+      // *** YENI ISLEM
+      const closedCoords = closePolygon(nPoly.geometry.coordinates);
+     
       // ----- OUTSIDE -------
-      const outerPolygon = turf.polygon(nPoly.geometry.coordinates);
+      const outerPolygon = turf.polygon(closedCoords);
       const offsetPolygon = turf.transformScale(outerPolygon, 0.9);
       
       solidPolyList.push({
@@ -149,7 +152,7 @@ router.post('/UpdateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 3,
+          height: 4,
           color: "#BCCCDC"
         }
       });
@@ -158,14 +161,14 @@ router.post('/UpdateAll', async (req, res) => {
       // ----- INSIDE -------
       solidPolyList.push({
         type: nPoly.type,
-        geometry: {...nPoly.geometry, coordinates: [nPoly.geometry.coordinates[0], offsetPolygon.geometry.coordinates[0]]},
+        geometry: {...nPoly.geometry, coordinates: [closedCoords[0], offsetPolygon.geometry.coordinates[0]]},
         properties: {
           id: nPoly.properties.id,
           floor: nPoly.properties.floor,
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 16,
+          height: 5,
           color: "#9AA6B2"
         }
       });
@@ -218,5 +221,20 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
+function closePolygon(coords) {
+  // coords = [ [ [x,y], [x,y], [x,y], ... ] ]
+  const ring = coords[0];
+  const first = ring[0];
+  const last = ring[ring.length - 1];
+
+  // Eğer son nokta ilk noktayla aynı değilse kapat
+  if (first[0] !== last[0] || first[1] !== last[1]) {
+    ring.push(first);
+  }
+
+  return [ring];
+}
 
 export default router; 
