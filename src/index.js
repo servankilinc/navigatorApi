@@ -17,9 +17,11 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
 
-// Middleware
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 app.use(cors());
-app.use(express.json());
+
 
 // Routes
 app.use('/api/advancedPoint', advancedPointRoutes);
@@ -39,4 +41,4 @@ mongoose.connect(process.env.MONGODB_URI)
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-}); 
+});

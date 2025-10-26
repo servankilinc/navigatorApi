@@ -152,7 +152,7 @@ router.post('/UpdateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 4,
+          height: 2,
           color: "#BCCCDC"
         }
       });
@@ -168,7 +168,7 @@ router.post('/UpdateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 5,
+          height: 2,
           color: "#9AA6B2"
         }
       });
