@@ -2,11 +2,44 @@ import express from 'express';
 import * as turf from "@turf/turf";
 import Polygon from '../models/Polygon.js';
 import Solid from '../models/Solid.js';
-
-
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const router = express.Router();
+
+ // ======= Multer Config =======
+ const uploadDir = 'uploads';
+ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
  
+ const storage = multer.diskStorage({
+   destination: (req, file, cb) => {
+     cb(null, uploadDir);
+   },
+   filename: (req, file, cb) => {
+     cb(null, Date.now() + path.extname(file.originalname));
+   }
+ });
+ 
+ const upload = multer({ storage });
+ 
+ // ======= Public Uploads Folder =======
+ router.use('/uploads', express.static(uploadDir));
+ 
+ 
+ // POST /api/sketch/upload
+ router.post('/upload', upload.single('file'), async (req, res) => {
+   try {
+     const fileUrl = `uploads/${req.file.filename}`;
+   
+     res.status(200).json({ url: fileUrl });
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ message: 'Upload failed', error });
+   }
+ });
+ 
+
 router.get('/', async (req, res) => {
   try {
     const polygons = await Polygon.find();
@@ -141,8 +174,8 @@ router.post('/UpdateAll', async (req, res) => {
      
       // ----- OUTSIDE -------
       const outerPolygon = turf.polygon(closedCoords);
-      const offsetPolygon = turf.transformScale(outerPolygon, 0.9);
-      
+      const offsetPolygon = turf.buffer(outerPolygon, -0.5, { units: 'meters' });
+ 
       solidPolyList.push({
         type: nPoly.type,
         geometry: offsetPolygon.geometry,
@@ -153,7 +186,7 @@ router.post('/UpdateAll', async (req, res) => {
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
           height: 2,
-          color: "#BCCCDC"
+          color: "#d0d8dfff"
         }
       });
       // ----- OUTSIDE -------
@@ -169,7 +202,7 @@ router.post('/UpdateAll', async (req, res) => {
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
           height: 2,
-          color: "#9AA6B2"
+          color: "#bfc7cfff"
         }
       });
       // ----- INSIDE -------
