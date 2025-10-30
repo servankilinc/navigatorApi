@@ -1,0 +1,8 @@
+Model Information:
+* title:	Airport ATM
+* source:	https://sketchfab.com/3d-models/airport-atm-8573328acbbd4bffae55456c4ccff650
+* author:	assetfactory (https://sketchfab.com/assetfactory)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

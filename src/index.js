@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+import https from 'https';
+import fs from 'fs';
+
 import advancedPointRoutes from './routes/advancedPointRoutes.js';
 import entrancePointRoutes from './routes/entrancePointRoutes.js';
 import floorRoutes from './routes/floorRoutes.js';
@@ -11,6 +14,7 @@ import pathRoutes from './routes/pathRoutes.js';
 import polygonRoutes from './routes/polygonRoutes.js';
 import solidRoutes from './routes/solidRoutes.js';
 import sketchRoutes from './routes/sketchRoutes.js';
+import threeDModelRoutes from './routes/threeDModelRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +36,7 @@ app.use('/api/path', pathRoutes);
 app.use('/api/polygon', polygonRoutes);
 app.use('/api/solid', solidRoutes);
 app.use('/api/sketch', sketchRoutes);
+app.use('/api/threeDModel', threeDModelRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -42,3 +47,14 @@ mongoose.connect(process.env.MONGODB_URI)
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// // Sertifikalar
+// const options = {
+//   key: fs.readFileSync('C:/cert/localhost+1-key.pem'),
+//   cert: fs.readFileSync('C:/cert/localhost+1.pem'),
+// };
+
+// // HTTPS server başlat
+// https.createServer(options, app).listen(PORT, '0.0.0.0', () => {
+//   console.log(`HTTPS server running on https://192.168.1.145:${PORT}`);
+// });

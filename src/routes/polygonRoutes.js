@@ -185,8 +185,8 @@ router.post('/UpdateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 2,
-          color: "#d0d8dfff"
+          height: 3,
+          color: "#97b6d1ff"
         }
       });
       // ----- OUTSIDE -------
@@ -201,8 +201,8 @@ router.post('/UpdateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 2,
-          color: "#bfc7cfff"
+          height: 3,
+          color: "#95b1ccff"
         }
       });
       // ----- INSIDE -------
