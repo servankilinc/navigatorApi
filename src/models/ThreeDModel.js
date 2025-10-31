@@ -1,22 +1,42 @@
 import mongoose from "mongoose";
- 
+
+// GeoJSON Point Schema
+const pointSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ["Point"],
+    required: true,
+    default: "Point",
+  },
+  coordinates: {
+    type: [Number], // [longitude, latitude]
+    required: true,
+  },
+});
+
 const threeDModelSchema = new mongoose.Schema(
   {
-    source: { type: String, required: true },
-    origin: {
-      type: [Number], // [lat, lng]
+    type: {
+      type: String,
+      enum: ["Feature"],
       required: true,
-      validate: {
-        validator: function (v) {
-          return v.length === 2;
-        },
-        message: 'Origin must be an array of two numbers: [lat, lng]',
-      },
+      default: "Feature",
     },
-    scaleRate: { type: Number, required: true },
-    rotateX: { type: Number, required: true },
-    rotateY: { type: Number, required: true },
-    rotateZ: { type: Number, required: true },
+    geometry: {
+      type: pointSchema, // GeoJSON Point
+      required: true,
+    },
+    properties: {
+      layerId: { type: Number },
+      id: { type: String, required: true },
+      floor: { type: Number, required: true },
+      name: { type: String },
+      source: { type: String, required: true },
+      scaleRate: { type: Number, required: true },
+      rotateX: { type: Number, required: true },
+      rotateY: { type: Number, required: true },
+      rotateZ: { type: Number, required: true },
+    },
   },
   { timestamps: true } // createdAt ve updatedAt otomatik eklenir
 );
