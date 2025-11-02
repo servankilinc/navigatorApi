@@ -34,6 +34,8 @@ const polygonSchema = new mongoose.Schema(
       iconSource: { type: String },
       popupContent: { type: String },
       entrance: entrancePointSchema, // Opsiyonel entrance point
+      showable: { type: Boolean, default: true },
+      priority: { type: Number, default: 1 }
     },
   },
   { timestamps: true }

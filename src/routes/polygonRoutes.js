@@ -168,7 +168,7 @@ router.post('/UpdateAll', async (req, res) => {
     }
 
     var solidPolyList = [];
-    newPolygons.map(nPoly => {
+    newPolygons.filter(f => f.properties.showable).map(nPoly => {
       // *** YENI ISLEM
       const closedCoords = closePolygon(nPoly.geometry.coordinates);
      
@@ -186,7 +186,7 @@ router.post('/UpdateAll', async (req, res) => {
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
           height: 3,
-          color: "#97b6d1ff"
+          color: "#d0d8dfff"
         }
       });
       // ----- OUTSIDE -------
@@ -202,7 +202,7 @@ router.post('/UpdateAll', async (req, res) => {
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
           height: 3,
-          color: "#95b1ccff"
+          color: "#bfc7cfff"
         }
       });
       // ----- INSIDE -------
