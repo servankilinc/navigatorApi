@@ -5,6 +5,7 @@ import Solid from '../models/Solid.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import sharp from 'sharp';
 
 const router = express.Router();
 
@@ -27,18 +28,28 @@ const router = express.Router();
  router.use('/uploads', express.static(uploadDir));
  
  
- // POST /api/sketch/upload
- router.post('/upload', upload.single('file'), async (req, res) => {
-   try {
-     const fileUrl = `uploads/${req.file.filename}`;
-   
-     res.status(200).json({ url: fileUrl });
-   } catch (error) {
-     console.error(error);
-     res.status(500).json({ message: 'Upload failed', error });
-   }
- });
- 
+// ======= POST /api/sketch/upload =======
+router.post('/upload', upload.single('file'), async (req, res) => {
+  try {
+    const filePath = path.join(uploadDir, req.file.filename);
+    const resizedPath = path.join(uploadDir, 'resized-' + req.file.filename);
+
+    // 🔥 Sharp ile yeniden boyutlandır
+    await sharp(filePath)
+      .resize({ width: 1200 }) // genişliği 1200px sabitle, oranı korur
+      .toFile(resizedPath);
+
+    // Orijinal dosyayı istersen silebilirsin:
+    fs.unlinkSync(filePath);
+
+    const fileUrl = `uploads/${'resized-' + req.file.filename}`;
+    res.status(200).json({ url: fileUrl });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Upload failed', error });
+  }
+});
 
 router.get('/', async (req, res) => {
   try {
@@ -185,7 +196,7 @@ router.post('/UpdateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 3,
+          height: 2,
           color: "#d0d8dfff"
         }
       });
@@ -201,7 +212,7 @@ router.post('/UpdateAll', async (req, res) => {
           name: nPoly.properties.name,
           popupContent: nPoly.properties.popupContent,
           base_height: 0,
-          height: 3,
+          height: 2,
           color: "#bfc7cfff"
         }
       });
